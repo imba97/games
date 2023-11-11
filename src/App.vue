@@ -4,9 +4,13 @@
   <div>
     <div px-4 h-10 flex items-center justify-between>
       <div>Memory Games v{{ version }}</div>
-      <div @click="changeLanguage">
-        <div i-ph-globe-light h-8 w-8 bg-primary></div>
+      <div flex items-center gap-2>
+        <div @click="changeLanguage">
+          <div i-ph-globe-light h-8 w-8 bg-primary></div>
+        </div>
+        <div i-mdi-github h-8 w-8 @click="openGithub"></div>
       </div>
+
       <div
         v-if="showLanguage"
         p-2
@@ -85,5 +89,9 @@ const changeLanguage = () => {
 const setLanguage = (value: string) => {
   locale.value = value
   closeLanguagePanel()
+}
+
+const openGithub = () => {
+  window.open('https://github.com/imba97/memory-games')
 }
 </script>

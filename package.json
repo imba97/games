@@ -1,0 +1,31 @@
+{
+  "name": "memory-games",
+  "private": true,
+  "version": "1.0.0",
+  "author": "imba97",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "vue": "^3.3.4",
+    "vue-i18n": "^9.6.5",
+    "vue-router": "^4.2.5"
+  },
+  "devDependencies": {
+    "@iconify/json": "^2.2.140",
+    "@types/lodash": "^4.14.201",
+    "@types/node": "^20.9.0",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "sass": "^1.69.5",
+    "typescript": "^5.0.2",
+    "unocss": "^0.57.3",
+    "unplugin-auto-import": "^0.16.7",
+    "vite": "^4.4.5",
+    "vue-tsc": "^1.8.5"
+  }
+}

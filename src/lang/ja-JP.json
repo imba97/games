@@ -1,0 +1,10 @@
+{
+  "game": {
+    "win": "勝ち！かかった時間 {countDown}s",
+    "over": "敗北！ポイント {score}",
+    "startTips": "この画像を覚えてください。",
+    "countDown": "かかった時間",
+    "noImage": "何もない",
+    "reset": "リスタート"
+  }
+}

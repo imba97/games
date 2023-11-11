@@ -1,0 +1,10 @@
+{
+  "game": {
+    "win": "游戏胜利！用时 {countDown}s",
+    "over": "游戏结束！得分 {score}",
+    "startTips": "记住上面的图片，接下来要考。",
+    "countDown": "用时",
+    "noImage": "没啦",
+    "reset": "重新开始"
+  }
+}

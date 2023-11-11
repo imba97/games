@@ -17,7 +17,7 @@ img {
   <div h-screen w-screen flex items-center justify-center>
     <div w-full xl:w-300 h-full xl:h-180 xl:rounded-6 flex="~ col" items-center>
       <!-- 倒计时 -->
-      <div mt-10 text-6>{{ t('game.countDown') }}：{{ countDown }}</div>
+      <div mt-10 text-6>{{ t('game.countDown') }}：{{ countDown }}s</div>
       <div m-10 text="center 10">
         <div h-36 w-64>
           <img

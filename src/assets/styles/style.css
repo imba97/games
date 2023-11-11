@@ -5,7 +5,7 @@
 html,
 body,
 #app {
-  --at-apply: w-screen h-screen box-border;
+  --at-apply: w-screen h-screen overflow-hidden;
 }
 
 #app {

@@ -5,6 +5,7 @@
     "startTips": "记住上面的图片，接下来要考。",
     "countDown": "用时",
     "noImage": "没啦",
-    "reset": "重新开始"
+    "reset": "重新开始",
+    "startButton": "开始"
   }
 }

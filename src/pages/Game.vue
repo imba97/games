@@ -58,7 +58,7 @@ img {
           shadow-lg
           @click="start"
         >
-          开始
+          {{ t('game.startButton') }}
         </button>
       </div>
     </div>

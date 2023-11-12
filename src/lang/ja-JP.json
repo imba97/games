@@ -5,6 +5,7 @@
     "startTips": "この画像を覚えてください。",
     "countDown": "かかった時間",
     "noImage": "何もない",
-    "reset": "リスタート"
+    "reset": "リスタート",
+    "startButton": "スタート"
   }
 }

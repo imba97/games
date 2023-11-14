@@ -47,19 +47,24 @@ img {
         </div>
       </div>
       <div v-else text-center>
-        <div>{{ t('game.startTips') }}</div>
-        <button
-          mt-5
-          w-32
-          h-18
-          rounded-2
-          bg-primary
-          text="6 white"
-          shadow-lg
-          @click="start"
-        >
-          {{ t('game.startButton') }}
-        </button>
+        <div v-if="progress === 100">
+          <div>{{ t('game.startTips') }}</div>
+          <button
+            mt-5
+            w-32
+            h-18
+            rounded-2
+            bg-primary
+            text="6 white"
+            shadow-lg
+            @click="start"
+          >
+            {{ t('game.startButton') }}
+          </button>
+        </div>
+        <div v-else>
+          <div text-10>{{ progress }}%</div>
+        </div>
       </div>
     </div>
 
@@ -84,9 +89,11 @@ img {
 <script lang="ts" setup>
 import Dialog from '@/components/Dialog.vue'
 
-import { importImages } from '@/utils/import-images'
+import { pullImages } from '@/utils/import-images'
 
 const { t } = useI18n()
+
+const progress = ref(0)
 
 const timer = reactive({
   id: -1,
@@ -108,14 +115,9 @@ const currentImage = ref<string>('')
 const needToFindImage = ref<string>('')
 
 /**
- * 初始选项，重置时用
- */
-const originalOptionsList = _.map(importImages())
-
-/**
  * 全部选项
  */
-const allOptionsList = ref<string[]>(_.clone(originalOptionsList))
+const allOptionsList = ref<string[]>([])
 
 /**
  * 当前选项图
@@ -139,6 +141,19 @@ const dialog = reactive({
 onMounted(() => {
   reset()
 })
+
+const initImages = async () => {
+  progress.value = 0
+
+  return new Promise((resolve) => {
+    allOptionsList.value = pullImages(10, (p) => {
+      progress.value = p
+      if (p === 100) {
+        resolve(true)
+      }
+    })
+  })
+}
 
 const start = () => {
   startTimer()
@@ -241,16 +256,16 @@ const gameOver = () => {
   })
 }
 
-const reset = () => {
+const reset = async () => {
   isStarted.value = false
   currentImage.value = ''
   needToFindImage.value = ''
   currentOptionsList.value = []
   checkedOptionsList.value = []
-  allOptionsList.value = _.clone(originalOptionsList)
+
+  await initImages()
 
   score.value = 0
-
   timer.time = 0
   if (timer.id !== -1) {
     window.clearInterval(timer.id)

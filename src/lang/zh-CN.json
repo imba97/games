@@ -7,5 +7,8 @@
     "noImage": "没啦",
     "reset": "重新开始",
     "startButton": "开始"
+  },
+  "pages": {
+    "memoryGame": "记忆游戏"
   }
 }

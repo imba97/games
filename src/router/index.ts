@@ -8,6 +8,11 @@ const routes: RouteRecordRaw[] = [
     redirect: '/Home'
   },
   {
+    path: '/Home',
+    name: 'home',
+    component: () => import('@/pages/Home.vue')
+  },
+  {
     path: '/MemoryGame',
     name: 'memoryGame',
     component: () => import('@/pages/MemoryGame.vue')

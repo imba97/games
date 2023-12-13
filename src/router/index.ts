@@ -5,12 +5,12 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'index',
-    redirect: '/Game'
+    redirect: '/Home'
   },
   {
-    path: '/Game',
-    name: 'game',
-    component: () => import('@/pages/Game.vue')
+    path: '/MemoryGame',
+    name: 'memoryGame',
+    component: () => import('@/pages/MemoryGame.vue')
   }
 ]
 

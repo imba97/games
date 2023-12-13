@@ -3,7 +3,18 @@
 <template>
   <div>
     <div px-4 h-10 flex items-center justify-between>
-      <div>Memory Games v{{ version }}</div>
+      <div flex gap-3>
+        <div v-show="route.name !== 'home'">
+          <div
+            i-material-symbols-arrow-back-rounded
+            h-6
+            w-6
+            bg-primary
+            @click="() => router.back()"
+          ></div>
+        </div>
+        <div>Memory Games v{{ version }}</div>
+      </div>
       <div flex items-center gap-2>
         <div @click="changeLanguage">
           <div i-ph-globe-light h-8 w-8 bg-primary></div>
@@ -51,6 +62,9 @@
 import { version } from '../package.json'
 
 const { locale } = useI18n()
+
+const route = useRoute()
+const router = useRouter()
 
 const showLanguage = ref(false)
 const languagePanelAnimation = ref('animate-bounce-in')

@@ -13,7 +13,7 @@
             @click="() => router.back()"
           ></div>
         </div>
-        <div>Memory Games v{{ version }}</div>
+        <div>imba97 Games v{{ version }}</div>
       </div>
       <div flex items-center gap-2>
         <div @click="changeLanguage">
@@ -106,6 +106,6 @@ const setLanguage = (value: string) => {
 }
 
 const openGithub = () => {
-  window.open('https://github.com/imba97/memory-games')
+  window.open('https://github.com/imba97/games')
 }
 </script>

@@ -11,5 +11,20 @@
     "win": "勝ち！かかった時間 {countDown}s",
     "over": "敗北！ポイント {score}",
     "reset": "リスタート"
+  },
+  "taoZheSimulator": {
+    "o": "オ",
+    "a": "ア",
+    "ai": "アィ",
+    "ei": "エ",
+    "sunNan": "ソンナン",
+    "chou1": "チョウ→",
+    "chou2": "チョウ↘",
+    "point": "ポイント"
+  },
+  "game": {
+    "start": "スタート",
+    "loading": "ローディング",
+    "loadingWithProgress": "ローディング {progress}%"
   }
 }

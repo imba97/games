@@ -11,5 +11,20 @@
     "win": "游戏胜利！用时 {countDown}s",
     "over": "游戏结束！得分 {score}",
     "reset": "重新开始"
+  },
+  "taoZheSimulator": {
+    "o": "哦",
+    "a": "啊",
+    "ai": "哎",
+    "ei": "诶",
+    "sunNan": "孙楠",
+    "chou1": "臭→",
+    "chou2": "臭↘",
+    "point": "分数"
+  },
+  "game": {
+    "start": "开始",
+    "loading": "加载中",
+    "loadingWithProgress": "加载中 {progress}%"
   }
 }

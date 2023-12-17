@@ -28,7 +28,8 @@ export default defineConfig({
         'vue-router',
         'vue-i18n',
         {
-          lodash: [['*', '_']]
+          lodash: [['*', '_']],
+          '@/lang': [['default', 'i18n']]
         }
       ],
       dts: resolvePath('auto-import/auto-import.d.ts'),

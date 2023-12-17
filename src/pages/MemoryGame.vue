@@ -59,7 +59,7 @@ img {
             shadow-lg
             @click="start"
           >
-            {{ t('memoryGame.startButton') }}
+            {{ t('game.start') }}
           </button>
         </div>
         <div v-else>

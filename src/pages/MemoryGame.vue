@@ -17,7 +17,7 @@ img {
   <div h-screen w-screen flex items-center justify-center>
     <div w-full xl:w-300 h-full xl:h-180 xl:rounded-6 flex="~ col" items-center>
       <!-- 倒计时 -->
-      <div mt-10 text-6>{{ t('game.countDown') }}：{{ countDown }}s</div>
+      <div mt-10 text-6>{{ t('memoryGame.countDown') }}：{{ countDown }}s</div>
       <div m-10 text="center 10">
         <div h-36 w-64>
           <img
@@ -37,7 +37,7 @@ img {
             items-center
             justify-center
           >
-            <span text="10 gray">{{ t('game.noImage') }}</span>
+            <span text="10 gray">{{ t('memoryGame.noImage') }}</span>
           </div>
         </div>
       </div>
@@ -48,7 +48,7 @@ img {
       </div>
       <div v-else text-center>
         <div v-if="progress === 100">
-          <div>{{ t('game.startTips') }}</div>
+          <div>{{ t('memoryGame.startTips') }}</div>
           <button
             mt-5
             w-32
@@ -59,7 +59,7 @@ img {
             shadow-lg
             @click="start"
           >
-            {{ t('game.startButton') }}
+            {{ t('memoryGame.startButton') }}
           </button>
         </div>
         <div v-else>
@@ -243,7 +243,7 @@ const pullOne = () => {
 const win = () => {
   stopTimer()
   dialog.visible = true
-  dialog.content = t('game.win', {
+  dialog.content = t('memoryGame.win', {
     countDown: countDown.value
   })
 }
@@ -251,7 +251,7 @@ const win = () => {
 const gameOver = () => {
   stopTimer()
   dialog.visible = true
-  dialog.content = t('game.over', {
+  dialog.content = t('memoryGame.over', {
     score: score.value
   })
 }

@@ -1,15 +1,15 @@
 {
-  "game": {
-    "win": "勝ち！かかった時間 {countDown}s",
-    "over": "敗北！ポイント {score}",
-    "startTips": "この画像を覚えてください。",
-    "countDown": "かかった時間",
-    "noImage": "何もない",
-    "reset": "リスタート",
-    "startButton": "スタート"
-  },
   "pages": {
     "memoryGame": "メモリーゲーム",
     "taoZheSimulator": "TaoZhe シミュレータ"
+  },
+  "memoryGame": {
+    "startTips": "この画像を覚えてください。",
+    "noImage": "何もない",
+    "countDown": "かかった時間",
+    "startButton": "スタート",
+    "win": "勝ち！かかった時間 {countDown}s",
+    "over": "敗北！ポイント {score}",
+    "reset": "リスタート"
   }
 }

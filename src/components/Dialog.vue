@@ -16,7 +16,7 @@
         text="6 white"
         @click="emit('reset')"
       >
-        {{ t('game.reset') }}
+        {{ t('memoryGame.reset') }}
       </button>
     </div>
   </div>

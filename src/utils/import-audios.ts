@@ -5,24 +5,28 @@ const audios = import.meta.glob('@/assets/audios/*.mp3', {
 })
 
 const importImages = () => {
-  return _.map(audios, (audio: any) => audio.default)
+  return _.map(audios, (audio: any, key) => ({
+    importPath: key,
+    audioSrc: audio.default
+  }))
 }
 
 export const loadAudios = (onProgress?: (progress: number) => void) => {
   return new Promise<Record<AudioType, HTMLAudioElement>>((resolve) => {
     const loadedAudioList: Record<string, HTMLAudioElement> = {}
 
-    const audioList = importImages()
     let loaded = 0
 
-    audioList.forEach((audioSrc: string) => {
+    const audioList = importImages()
+
+    audioList.forEach(({ audioSrc, importPath }) => {
       const audio = new Audio()
 
       audio.src = audioSrc
       audio.load()
 
       // 获取 type
-      const filename = audioSrc.split('/').at(-1)
+      const filename = importPath.split('/').at(-1)
       const type = filename?.replace('.mp3', '') as AudioType
       loadedAudioList[type] = audio
 

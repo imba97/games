@@ -15,7 +15,7 @@
       :key="item.path"
       @click="() => router.push(item.path)"
     >
-      {{ item.name }}
+      {{ item.name() }}
     </div>
   </div>
 </template>
@@ -27,11 +27,11 @@ const router = useRouter()
 
 const gameList = ref([
   {
-    name: t('pages.memoryGame'),
+    name: () => t('pages.memoryGame'),
     path: '/MemoryGame'
   },
   {
-    name: t('pages.taoZheSimulator'),
+    name: () => t('pages.taoZheSimulator'),
     path: '/TaoZheSimulator'
   }
 ])

@@ -1,6 +1,6 @@
 <style lang="scss" scoped>
 .game-list {
-  --at-apply: p-4;
+  --at-apply: p-4 flex flex-col gap-3;
 
   & > div {
     --at-apply: p-2 bg-primary text-white text-5 rounded-2;
@@ -29,6 +29,10 @@ const gameList = ref([
   {
     name: t('pages.memoryGame'),
     path: '/MemoryGame'
+  },
+  {
+    name: t('pages.taoZheSimulator'),
+    path: '/TaoZheSimulator'
   }
 ])
 </script>

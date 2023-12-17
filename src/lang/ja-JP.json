@@ -9,6 +9,7 @@
     "startButton": "スタート"
   },
   "pages": {
-    "memoryGame": "メモリーゲーム"
+    "memoryGame": "メモリーゲーム",
+    "taoZheSimulator": "TaoZhe シミュレータ"
   }
 }

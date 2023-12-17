@@ -9,6 +9,7 @@
     "startButton": "开始"
   },
   "pages": {
-    "memoryGame": "记忆游戏"
+    "memoryGame": "记忆游戏",
+    "taoZheSimulator": "陶吉吉模拟器"
   }
 }

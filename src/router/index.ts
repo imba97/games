@@ -16,6 +16,11 @@ const routes: RouteRecordRaw[] = [
     path: '/MemoryGame',
     name: 'memoryGame',
     component: () => import('@/pages/MemoryGame.vue')
+  },
+  {
+    path: '/TaoZheSimulator',
+    name: 'taoZheSimulator',
+    component: () => import('@/pages/TaoZheSimulator.vue')
   }
 ]
 

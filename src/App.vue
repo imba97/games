@@ -3,7 +3,7 @@
 <template>
   <div>
     <div px-4 h-10 flex items-center justify-between>
-      <div flex gap-3>
+      <div flex items-center gap-3>
         <div v-show="route.name !== 'home'">
           <div
             i-material-symbols-arrow-back-rounded

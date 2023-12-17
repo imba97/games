@@ -21,6 +21,11 @@ const routes: RouteRecordRaw[] = [
     path: '/TaoZheSimulator',
     name: 'taoZheSimulator',
     component: () => import('@/pages/TaoZheSimulator.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: '404',
+    redirect: '/Home'
   }
 ]
 

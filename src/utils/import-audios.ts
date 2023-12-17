@@ -8,7 +8,7 @@ const importImages = () => {
   return _.map(audios, (audio: any) => audio.default)
 }
 
-export const loadAudios = () => {
+export const loadAudios = (onProgress?: (progress: number) => void) => {
   return new Promise<Record<AudioType, HTMLAudioElement>>((resolve) => {
     const loadedAudioList: Record<string, HTMLAudioElement> = {}
 
@@ -27,7 +27,9 @@ export const loadAudios = () => {
       loadedAudioList[type] = audio
 
       audio.oncanplaythrough = () => {
-        ++loaded
+        if (_.isFunction(onProgress)) {
+          onProgress((++loaded / audioList.length) * 100)
+        }
 
         if (loaded === audioList.length) {
           resolve(loadedAudioList)

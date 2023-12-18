@@ -26,7 +26,8 @@ export const loadAudios = (onProgress?: (progress: number) => void) => {
       audio.load()
 
       // 获取 type
-      const filename = importPath.split('/').at(-1)
+      const filePath = importPath.split('/')
+      const filename = filePath[filePath.length - 1]
       const type = filename?.replace('.mp3', '') as AudioType
       loadedAudioList[type] = audio
 

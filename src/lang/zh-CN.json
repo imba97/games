@@ -25,6 +25,7 @@
   "game": {
     "start": "开始",
     "loading": "加载中",
-    "loadingWithProgress": "加载中 {progress}%"
+    "loadingWithProgress": "加载中 {progress}%",
+    "loadAudio": "加载声效"
   }
 }

@@ -133,7 +133,7 @@
       </div>
 
       <div mt-10 flex justify-center>
-        <div v-show="progress !== 100" mt-3>
+        <div v-show="loadingAudios" mt-3>
           <div text-8>
             {{
               t('game.loadingWithProgress', {
@@ -142,10 +142,14 @@
             }}
           </div>
         </div>
-        <div v-show="progress === 100">
+        <div v-show="!loadingAudios">
           <div v-show="!isStarted" mt-3 gap-2>
-            <button bg-primary text="8! white" @click="playMusic">
-              {{ t('game.start') }}
+            <button
+              bg-primary
+              text="8! white"
+              @click="() => (loadedAudios ? playMusic() : doLoadAudios())"
+            >
+              {{ loadedAudios ? t('game.start') : t('game.loadAudio') }}
             </button>
           </div>
           <div v-show="isStarted">
@@ -238,19 +242,37 @@ const feedbacks = ref<{ id: string; text: string; time: number }[]>([])
  */
 const progress = ref(0)
 
+const loadingAudios = ref(false)
+
 /**
  * 游戏是否开始
  */
 const isStarted = ref(false)
 
+const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+
+const loadedAudios = computed(() => !_.isEmpty(audios.value))
+
 let music: HTMLAudioElement | null = null
 
-onMounted(async () => {
+onMounted(() => {
+  // iOS 先让开始按钮显示，具体加载在按钮点击事件里
+  if (isIOS) {
+    return
+  }
+
+  doLoadAudios()
+})
+
+const doLoadAudios = async () => {
   // 加载音频
+  loadingAudios.value = true
   audios.value = await loadAudios((_progress) => {
     progress.value = _progress
+  }).finally(() => {
+    loadingAudios.value = false
   })
-})
+}
 
 /**
  * 获取颜色
@@ -265,7 +287,7 @@ const getColor = (type: AudioType) => {
 /**
  * 播放背景音乐
  */
-const playMusic = () => {
+const playMusic = async () => {
   reset()
 
   isStarted.value = true
@@ -275,6 +297,7 @@ const playMusic = () => {
   }
 
   music.play()
+
   // 音乐停止事件
   music.addEventListener('ended', () => {
     isStarted.value = false

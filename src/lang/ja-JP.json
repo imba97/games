@@ -25,6 +25,7 @@
   "game": {
     "start": "スタート",
     "loading": "ローディング",
-    "loadingWithProgress": "ローディング {progress}%"
+    "loadingWithProgress": "ローディング {progress}%",
+    "loadAudio": "ロードサウンド"
   }
 }

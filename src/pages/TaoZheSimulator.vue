@@ -90,7 +90,7 @@
               items-center
               justify-center
               rounded-2
-              :style="getColor(item.type)"
+              :style="audioStyles[item.type]"
             >
               <span text-truncate>{{ item.name }}</span>
             </div>
@@ -126,7 +126,7 @@
         <button
           v-for="(getName, type) in AudioName"
           :key="type"
-          :style="getColor(type as AudioType)"
+          :style="audioStyles[type as AudioType]"
           @click="play(type as AudioType)"
         >
           {{ getName() }}
@@ -225,6 +225,11 @@ const timeline: Record<string, number | number[]> = Object.entries({
 }, {})
 
 /**
+ * 逐帧遍历用的键值对，提前算好避免每帧新建数组
+ */
+const timelineEntries = Object.entries(timeline)
+
+/**
  * 音乐块
  */
 const blocks = ref<BlockType[]>([])
@@ -251,18 +256,18 @@ const loadedAudios = computed(() => Object.keys(audios.value ?? {}).length > 0)
 
 let music: HTMLAudioElement | null = null
 
-let loopTimer: ReturnType<typeof setInterval> | undefined
+let frameId: number | undefined
 
 /**
  * 停止时间线轮询
  */
 function stopLoop() {
-  if (loopTimer === undefined) {
+  if (frameId === undefined) {
     return
   }
 
-  clearInterval(loopTimer)
-  loopTimer = undefined
+  cancelAnimationFrame(frameId)
+  frameId = undefined
 }
 
 onMounted(() => {
@@ -296,14 +301,18 @@ async function doLoadAudios() {
 }
 
 /**
- * 获取颜色
+ * 按钮颜色是静态的，提前算好，避免每次渲染都新建对象
  */
-function getColor(type: AudioType) {
-  return {
+const audioStyles = (Object.keys(AudioColor) as AudioType[]).reduce<
+  Record<string, { color: string, backgroundColor: string }>
+>((result, type) => {
+  result[type] = {
     color: AudioColor[type].text,
     backgroundColor: AudioColor[type].backgrond
   }
-}
+
+  return result
+}, {})
 
 /**
  * 播放背景音乐
@@ -329,33 +338,42 @@ async function playMusic() {
 
   stopLoop()
 
-  loopTimer = setInterval(() => {
-    if (!music) {
+  const step = () => {
+    const currentMusic = music
+
+    if (!currentMusic) {
       stopLoop()
       return
     }
 
-    blocks.value = blocks.value.filter(
+    const currentTime = currentMusic.currentTime
+
+    const aliveBlocks = blocks.value.filter(
       (block: BlockType) =>
-        block.time - music!.currentTime > -PointRange[FeedbackType.Good].max
+        block.time - currentTime > -PointRange[FeedbackType.Good].max
     )
+
+    // 只有真的移除了块才赋值，避免每帧都触发一次无谓的更新
+    if (aliveBlocks.length !== blocks.value.length) {
+      blocks.value = aliveBlocks
+    }
 
     removeWhere(
       feedbacks.value,
-      (feedback: { time: number }) => music!.currentTime - feedback.time > 0.8
+      (feedback: { time: number }) => currentTime - feedback.time > 0.8
     )
 
-    let playKey
-    let time
+    let playKey: AudioType | undefined
+    let time = 0
 
-    Object.entries(timeline).forEach(([key, value]) => {
+    timelineEntries.forEach(([key, value]) => {
       let latestTime
 
       if (Array.isArray(value)) {
         for (let i = 0; i < value.length; i++) {
           const n = value[i]
 
-          if (music!.currentTime - n > 0 && music!.currentTime - n < 0.1) {
+          if (currentTime - n > 0 && currentTime - n < 0.1) {
             latestTime = n
           }
         }
@@ -371,8 +389,8 @@ async function playMusic() {
       const lt = latestTime - 0.02
       const gt = latestTime + 0.02
 
-      if (music!.currentTime >= lt && music!.currentTime <= gt) {
-        playKey = key
+      if (currentTime >= lt && currentTime <= gt) {
+        playKey = key as AudioType
         time = latestTime
       }
     })
@@ -380,9 +398,9 @@ async function playMusic() {
     if (once && playKey !== undefined) {
       blocks.value.push({
         id: uniqueId('blocks_'),
-        type: playKey as AudioType,
-        name: AudioName[playKey as AudioType](),
-        time: time! + showBlockTime,
+        type: playKey,
+        name: AudioName[playKey](),
+        time: time + showBlockTime,
         played: false
       })
 
@@ -392,7 +410,20 @@ async function playMusic() {
     if (playKey === undefined) {
       once = true
     }
-  }, 10)
+  }
+
+  // 用 rAF 与渲染同频：比固定 10ms 轮询唤醒次数少，后台标签页还会自动暂停
+  const tick = () => {
+    step()
+
+    if (frameId === undefined) {
+      return
+    }
+
+    frameId = requestAnimationFrame(tick)
+  }
+
+  frameId = requestAnimationFrame(tick)
 }
 
 function play(type: AudioType) {
@@ -422,8 +453,14 @@ function play(type: AudioType) {
     return
   }
 
+  const currentMusic = music
+
+  if (!currentMusic) {
+    return
+  }
+
   // 正确
-  const time = music!.currentTime - block.time
+  const time = currentMusic.currentTime - block.time
   const feedback = feedbackValueOf(time)
 
   let feedbackText
@@ -443,7 +480,7 @@ function play(type: AudioType) {
     feedbacks.value.push({
       id: uniqueId('feedback_'),
       text: feedbackText,
-      time: music!.currentTime
+      time: currentMusic.currentTime
     })
   }
 

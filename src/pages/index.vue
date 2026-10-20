@@ -171,14 +171,14 @@ const gameList = ref([
     desc: () => t('pages.memoryGameDesc'),
     icon: 'i-ph-images-light',
     color: 'var(--lilac)',
-    path: '/MemoryGame'
+    path: '/memory-game'
   },
   {
     name: () => t('pages.taoZheSimulator'),
     desc: () => t('pages.taoZheSimulatorDesc'),
     icon: 'i-ph-music-notes-light',
     color: 'var(--flame)',
-    path: '/TaoZheSimulator'
+    path: '/tao-zhe-simulator'
   }
 ])
 </script>

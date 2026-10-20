@@ -5,6 +5,8 @@ export default antfu(
     ignores: [
       // 由 unplugin-auto-import 在构建时生成
       'auto-import/**',
+      // 由 unplugin-vue-router 在构建时生成
+      'typed-router.d.ts',
       // 构建产物
       'dist/**'
     ],

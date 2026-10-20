@@ -178,7 +178,7 @@
     <header class="topbar">
       <div class="brand">
         <button
-          v-show="route.name !== 'home'"
+          v-show="route.path !== '/'"
           class="icon-btn"
           type="button"
           aria-label="返回"
@@ -187,7 +187,7 @@
           <div i-material-symbols-arrow-back-rounded class="icon" />
         </button>
 
-        <router-link to="/Home" class="wordmark">
+        <router-link to="/" class="wordmark">
           imba97
           <span class="wordmark-sub">games</span>
         </router-link>

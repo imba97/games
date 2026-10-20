@@ -1,37 +1,21 @@
-import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
-
-const routes: RouteRecordRaw[] = [
-  {
-    path: '/',
-    name: 'index',
-    redirect: '/Home'
-  },
-  {
-    path: '/Home',
-    name: 'home',
-    component: () => import('@/pages/Home.vue')
-  },
-  {
-    path: '/MemoryGame',
-    name: 'memoryGame',
-    component: () => import('@/pages/MemoryGame.vue')
-  },
-  {
-    path: '/TaoZheSimulator',
-    name: 'taoZheSimulator',
-    component: () => import('@/pages/TaoZheSimulator.vue')
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    name: '404',
-    redirect: '/Home'
-  }
-]
+import { handleHotUpdate, routes } from 'vue-router/auto-routes'
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    ...routes,
+    // 未知路径回到首页
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/'
+    }
+  ]
 })
+
+// 页面文件增删时热更新路由表
+if (import.meta.hot) {
+  handleHotUpdate(router)
+}
 
 export default router

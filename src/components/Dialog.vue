@@ -6,7 +6,9 @@
 
 <template>
   <div flex="~ col" class="dialog">
-    <div flex-1 text="8 center">{{ props.content }}</div>
+    <div flex-1 text="8 center">
+      {{ props.content }}
+    </div>
     <div mt-10 flex items-center justify-center>
       <button
         w-32

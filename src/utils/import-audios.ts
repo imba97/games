@@ -1,17 +1,17 @@
-import { AudioType } from '@/enums/audio'
+import type { AudioType } from '@/enums/audio'
 
 const audios = import.meta.glob('@/assets/audios/*.mp3', {
   eager: true
 }) as Record<string, { default: string }>
 
-const importAudios = () => {
+function importAudios() {
   return Object.entries(audios).map(([importPath, audio]) => ({
     importPath,
     audioSrc: audio.default
   }))
 }
 
-export const loadAudios = (onProgress?: (progress: number) => void) => {
+export function loadAudios(onProgress?: (progress: number) => void) {
   return new Promise<Record<AudioType, HTMLAudioElement>>((resolve) => {
     const loadedAudioList: Record<string, HTMLAudioElement> = {}
 

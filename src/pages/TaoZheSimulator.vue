@@ -74,7 +74,7 @@
     <div my-30 class="progress">
       <div w-full h-3 rounded-l-full bg-primary relative flex items-center>
         <div absolute bottom-3 right-0 w="90%" h-1 bg-red>
-          <div absolute bottom-0 left-0 w-1 h-8 rounded-t-full bg-blue></div>
+          <div absolute bottom-0 left-0 w-1 h-8 rounded-t-full bg-blue />
           <div>
             <div
               v-for="item in blocks"
@@ -116,7 +116,7 @@
             i-material-symbols-light-keyboard-double-arrow-left-rounded
             h-10
             w-10
-          ></div>
+          />
         </div>
       </div>
     </div>
@@ -125,6 +125,7 @@
       <div>
         <button
           v-for="(getName, type) in AudioName"
+          :key="type"
           :style="getColor(type as AudioType)"
           @click="play(type as AudioType)"
         >
@@ -159,7 +160,7 @@
               h-20
               w-20
               bg-primary
-            ></div>
+            />
           </div>
         </div>
       </div>
@@ -169,17 +170,17 @@
 
 <script lang="ts" setup>
 import {
-  AudioType,
-  AudioName,
   AudioColor,
+  AudioName,
+  AudioType,
   FeedbackType,
   PointRange
 } from '@/enums/audio'
 
-import { loadAudios } from '@/utils/import-audios'
 import { removeWhere, uniqueId } from '@/utils/collection'
+import { loadAudios } from '@/utils/import-audios'
 
-type BlockType = {
+interface BlockType {
   id: string
   type: AudioType
   name: string
@@ -217,7 +218,7 @@ const timeline: Record<string, number | number[]> = Object.entries({
   [AudioType.Chou2]: 13
 }).reduce<Record<string, number | number[]>>((result, [key, item]) => {
   result[key] = Array.isArray(item)
-    ? item.map((n) => n - showBlockTime)
+    ? item.map(n => n - showBlockTime)
     : item - showBlockTime
 
   return result
@@ -230,7 +231,7 @@ const blocks = ref<BlockType[]>([])
 /**
  * 点击反馈
  */
-const feedbacks = ref<{ id: string; text: string; time: number }[]>([])
+const feedbacks = ref<{ id: string, text: string, time: number }[]>([])
 
 /**
  * 音频资源加载进度条
@@ -259,7 +260,7 @@ onMounted(() => {
   doLoadAudios()
 })
 
-const doLoadAudios = async () => {
+async function doLoadAudios() {
   // 加载音频
   loadingAudios.value = true
   audios.value = await loadAudios((_progress) => {
@@ -272,7 +273,7 @@ const doLoadAudios = async () => {
 /**
  * 获取颜色
  */
-const getColor = (type: AudioType) => {
+function getColor(type: AudioType) {
   return {
     color: AudioColor[type].text,
     backgroundColor: AudioColor[type].backgrond
@@ -282,7 +283,7 @@ const getColor = (type: AudioType) => {
 /**
  * 播放背景音乐
  */
-const playMusic = async () => {
+async function playMusic() {
   reset()
 
   isStarted.value = true
@@ -293,15 +294,16 @@ const playMusic = async () => {
 
   music.play()
 
+  let once = true
+  let timer: ReturnType<typeof setInterval> | undefined
+
   // 音乐停止事件
   music.addEventListener('ended', () => {
     isStarted.value = false
     clearInterval(timer)
   })
 
-  let once = true
-
-  const timer = setInterval(() => {
+  timer = setInterval(() => {
     if (!music) {
       clearInterval(timer)
       return
@@ -331,7 +333,8 @@ const playMusic = async () => {
             latestTime = n
           }
         }
-      } else {
+      }
+      else {
         latestTime = value
       }
 
@@ -366,7 +369,7 @@ const playMusic = async () => {
   }, 10)
 }
 
-const play = (type: AudioType) => {
+function play(type: AudioType) {
   ;(audios.value![type].cloneNode() as HTMLAudioElement).play()
 
   const noPlayedBlock = blocks.value.filter(
@@ -417,14 +420,14 @@ const play = (type: AudioType) => {
 /**
  * 移除块
  */
-const removeBlock = (id: string) => {
+function removeBlock(id: string) {
   removeWhere(blocks.value, (block: BlockType) => block.id === id)
 }
 
 /**
  * 根据时间匹配按键反馈
  */
-const feedbackValueOf = (time: number) => {
+function feedbackValueOf(time: number) {
   const feedback = (Object.keys(PointRange) as FeedbackType[]).find((key) => {
     const item = PointRange[key]
 
@@ -437,7 +440,7 @@ const feedbackValueOf = (time: number) => {
 /**
  * 重置游戏
  */
-const reset = () => {
+function reset() {
   if (music) {
     music.currentTime = 0
     music.pause()

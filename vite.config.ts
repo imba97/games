@@ -1,9 +1,10 @@
-import { defineConfig } from 'vite'
+import path from 'node:path'
+import process from 'node:process'
 import vue from '@vitejs/plugin-vue'
 import unoCSS from 'unocss/vite'
 import autoImport from 'unplugin-auto-import/vite'
 
-import path from 'node:path'
+import { defineConfig } from 'vite'
 
 const resolvePath = (p: string) => path.resolve(process.cwd(), p)
 

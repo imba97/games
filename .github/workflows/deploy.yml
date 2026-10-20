@@ -43,6 +43,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Lint
+        run: pnpm lint
+
       # 构建必须早于类型检查：`unplugin-auto-import` 在 `vite build` 期间才写出
       # auto-import/auto-import.d.ts，该文件是 git-ignored 的，不先构建的话全局 API 解析不到
       - name: Build

@@ -1,8 +1,8 @@
-import '@/assets/styles/style.css'
 import App from '@/App.vue'
+import i18n from '@/lang'
 
 import router from '@/router'
-import i18n from '@/lang'
+import '@/assets/styles/style.css'
 
 import 'virtual:uno.css'
 

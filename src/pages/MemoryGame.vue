@@ -17,7 +17,9 @@ img {
   <div h-screen w-screen flex items-center justify-center>
     <div w-full xl:w-300 h-full xl:h-180 xl:rounded-6 flex="~ col" items-center>
       <!-- 倒计时 -->
-      <div mt-10 text-6>{{ t('memoryGame.countDown') }}：{{ countDown }}s</div>
+      <div mt-10 text-6>
+        {{ t('memoryGame.countDown') }}：{{ countDown }}s
+      </div>
       <div m-10 text="center 10">
         <div h-36 w-64>
           <img
@@ -26,7 +28,7 @@ img {
             w-full
             object-cover
             :src="currentImage"
-          />
+          >
           <div
             v-else
             h-full
@@ -43,7 +45,7 @@ img {
       </div>
       <div v-if="isStarted" class="options-container">
         <div v-for="url in currentOptionsList" :key="url" @click="next(url)">
-          <img w-full h-full object-cover :src="url" />
+          <img w-full h-full object-cover :src="url">
         </div>
       </div>
       <div v-else text-center>
@@ -63,7 +65,9 @@ img {
           </button>
         </div>
         <div v-else>
-          <div text-10>{{ progress }}%</div>
+          <div text-10>
+            {{ progress }}%
+          </div>
         </div>
       </div>
     </div>
@@ -81,7 +85,7 @@ img {
       z-1000
       class="bg-[rgba(0,0,0,0.5)]"
     >
-      <Dialog :content="dialog.content" @reset="onDialogReset"></Dialog>
+      <Dialog :content="dialog.content" @reset="onDialogReset" />
     </div>
   </div>
 </template>
@@ -89,8 +93,8 @@ img {
 <script lang="ts" setup>
 import Dialog from '@/components/Dialog.vue'
 
-import { pullImages } from '@/utils/import-images'
 import { randomInt, shuffle } from '@/utils/collection'
+import { pullImages } from '@/utils/import-images'
 
 const { t } = useI18n()
 
@@ -143,7 +147,7 @@ onMounted(() => {
   reset()
 })
 
-const initImages = async () => {
+async function initImages() {
   progress.value = 0
 
   return new Promise((resolve) => {
@@ -156,23 +160,23 @@ const initImages = async () => {
   })
 }
 
-const start = () => {
+function start() {
   startTimer()
   next()
   isStarted.value = true
 }
 
-const startTimer = () => {
+function startTimer() {
   timer.id = window.setInterval(() => {
     timer.time += 10
   }, 10)
 }
 
-const stopTimer = () => {
+function stopTimer() {
   window.clearInterval(timer.id)
 }
 
-const next = (clickedItem?: string) => {
+function next(clickedItem?: string) {
   // 将上个需要找的图片放到已选选项中
   if (isStarted.value) {
     // 游戏结束
@@ -208,7 +212,7 @@ const next = (clickedItem?: string) => {
   currentImage.value = pullOne()
 }
 
-const generateObstacle = () => {
+function generateObstacle() {
   const list = [...checkedOptionsList.value]
 
   // 不足 5 个则全部放到可选项中
@@ -231,7 +235,7 @@ const generateObstacle = () => {
 /**
  * 随机取出一个值
  */
-const pullOne = () => {
+function pullOne() {
   if (allOptionsList.value.length === 0) {
     return ''
   }
@@ -241,7 +245,7 @@ const pullOne = () => {
   return item
 }
 
-const win = () => {
+function win() {
   stopTimer()
   dialog.visible = true
   dialog.content = t('memoryGame.win', {
@@ -249,7 +253,7 @@ const win = () => {
   })
 }
 
-const gameOver = () => {
+function gameOver() {
   stopTimer()
   dialog.visible = true
   dialog.content = t('memoryGame.over', {
@@ -257,7 +261,7 @@ const gameOver = () => {
   })
 }
 
-const reset = async () => {
+async function reset() {
   isStarted.value = false
   currentImage.value = ''
   needToFindImage.value = ''
@@ -281,7 +285,7 @@ const reset = async () => {
   currentImage.value = pullOne()
 }
 
-const onDialogReset = () => {
+function onDialogReset() {
   reset()
   dialog.visible = false
 }

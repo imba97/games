@@ -9,8 +9,8 @@ const images = import.meta.glob('@/assets/images/*.png', {
  */
 const loadedImages = new Set<string>()
 
-export const importImages = () => {
-  return Object.values(images).map((image) => image.default)
+export function importImages() {
+  return Object.values(images).map(image => image.default)
 }
 
 /**
@@ -20,10 +20,7 @@ export const importImages = () => {
  * @param length 取出数量
  * @param onProgress 进度回调
  */
-export const pullImages = (
-  length: number,
-  onProgress?: (progress: number) => void
-) => {
+export function pullImages(length: number, onProgress?: (progress: number) => void) {
   const images = [...importImages()]
   const resultImages: string[] = []
 
@@ -47,7 +44,8 @@ export const pullImages = (
         loadedImages.add(images[index])
         execOnProgress()
       }
-    } else {
+    }
+    else {
       execOnProgress()
     }
 

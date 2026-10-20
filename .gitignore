@@ -22,3 +22,6 @@ dist-ssr
 *.sw?
 
 /auto-import
+
+# eslint 缓存
+.eslintcache

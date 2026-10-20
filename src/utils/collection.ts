@@ -1,14 +1,14 @@
 /**
  * 生成 [min, max] 区间内的随机整数（含两端）
  */
-export const randomInt = (min: number, max: number) => {
+export function randomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
 /**
  * 返回打乱顺序后的新数组，不修改原数组（Fisher-Yates）
  */
-export const shuffle = <T>(list: T[]): T[] => {
+export function shuffle<T>(list: T[]): T[] {
   const result = [...list]
 
   for (let i = result.length - 1; i > 0; i--) {
@@ -25,10 +25,7 @@ export const shuffle = <T>(list: T[]): T[] => {
 /**
  * 原地移除满足条件的元素，返回被移除的元素（保持原顺序）
  */
-export const removeWhere = <T>(
-  list: T[],
-  predicate: (item: T) => boolean
-): T[] => {
+export function removeWhere<T>(list: T[], predicate: (item: T) => boolean): T[] {
   const removed: T[] = []
 
   for (let i = list.length - 1; i >= 0; i--) {

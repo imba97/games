@@ -52,8 +52,8 @@ export const AudioName: Record<string, () => string> = Object.freeze({
   [AudioType.Chou2]: () => t('taoZheSimulator.chou2')
 })
 
-export const AudioColor: Record<string, { text: string; backgrond: string }> =
-  Object.freeze({
+export const AudioColor: Record<string, { text: string, backgrond: string }>
+  = Object.freeze({
     [AudioType.A]: { text: '#fff', backgrond: '#8b5cf6' },
     [AudioType.Ai]: { text: '#fff', backgrond: '#0ea5e9' },
     [AudioType.Chou1]: { text: '#fff', backgrond: '#22c55e' },
@@ -80,8 +80,8 @@ export enum FeedbackType {
   Good = 'good'
 }
 
-export const PointRange: Record<FeedbackType, { min: number; max: number }> =
-  Object.freeze({
+export const PointRange: Record<FeedbackType, { min: number, max: number }>
+  = Object.freeze({
     [FeedbackType.Prematurely]: {
       min: -Infinity,
       max: -0.1

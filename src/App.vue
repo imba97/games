@@ -11,15 +11,15 @@
             w-6
             bg-primary
             @click="() => router.back()"
-          ></div>
+          />
         </div>
         <div>imba97 Games v{{ version }}</div>
       </div>
       <div flex items-center gap-2>
         <div @click="changeLanguage">
-          <div i-ph-globe-light h-8 w-8 bg-primary></div>
+          <div i-ph-globe-light h-8 w-8 bg-primary />
         </div>
-        <div i-mdi-github h-8 w-8 @click="openGithub"></div>
+        <div i-mdi-github h-8 w-8 @click="openGithub" />
       </div>
 
       <div
@@ -47,13 +47,15 @@
             h-6
             w-6
             :class="lang.value === locale ? 'text-primary' : 'text-gray-3'"
-          ></div>
-          <div text-6>{{ lang.label }}</div>
+          />
+          <div text-6>
+            {{ lang.label }}
+          </div>
         </div>
       </div>
     </div>
     <div>
-      <router-view></router-view>
+      <router-view />
     </div>
   </div>
 </template>
@@ -80,32 +82,33 @@ const languages = [
   }
 ]
 
-const openLanguagePanel = () => {
+function openLanguagePanel() {
   showLanguage.value = true
   languagePanelAnimation.value = 'animate-bounce-in'
 }
 
-const closeLanguagePanel = () => {
+function closeLanguagePanel() {
   languagePanelAnimation.value = 'animate-bounce-out'
   setTimeout(() => {
     showLanguage.value = false
   }, 500)
 }
 
-const changeLanguage = () => {
+function changeLanguage() {
   if (!showLanguage.value) {
     openLanguagePanel()
-  } else {
+  }
+  else {
     closeLanguagePanel()
   }
 }
 
-const setLanguage = (value: string) => {
+function setLanguage(value: string) {
   locale.value = value
   closeLanguagePanel()
 }
 
-const openGithub = () => {
+function openGithub() {
   window.open('https://github.com/imba97/games')
 }
 </script>

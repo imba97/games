@@ -11,7 +11,8 @@
     "typecheck": "vue-tsc --noEmit",
     "lint": "eslint --cache",
     "preview": "vite preview",
-    "prepare": "simple-git-hooks"
+    "prepare": "simple-git-hooks",
+    "release": "bumpp"
   },
   "dependencies": {
     "vue": "^3.5.44",
@@ -23,6 +24,7 @@
     "@iconify/json": "^2.2.545",
     "@types/node": "^26.6.5",
     "@vitejs/plugin-vue": "^6.0.10",
+    "bumpp": "^12.3.0",
     "eslint": "^10.13.0",
     "jiti": "^2.7.0",
     "nano-staged": "^1.0.2",

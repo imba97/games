@@ -1,12 +1,12 @@
 import path from 'node:path'
-import process from 'node:process'
 import vue from '@vitejs/plugin-vue'
 import unoCSS from 'unocss/vite'
 import autoImport from 'unplugin-auto-import/vite'
 
 import { defineConfig } from 'vite'
 
-const resolvePath = (p: string) => path.resolve(process.cwd(), p)
+// 用配置文件自身所在目录，避免从其他工作目录启动时别名解析错位
+const resolvePath = (p: string) => path.resolve(import.meta.dirname, p)
 
 // https://vitejs.dev/config/
 export default defineConfig({

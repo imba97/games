@@ -21,7 +21,7 @@ export function importImages() {
  * @param onProgress 进度回调
  */
 export function pullImages(length: number, onProgress?: (progress: number) => void) {
-  const images = [...importImages()]
+  const pool = [...importImages()]
   const resultImages: string[] = []
 
   let progress = 0
@@ -34,14 +34,21 @@ export function pullImages(length: number, onProgress?: (progress: number) => vo
   }
 
   for (let i = 0; i < length; i++) {
-    const index = randomInt(0, images.length - 1)
+    // 图片不够时提前结束，避免取到 undefined
+    if (pool.length === 0) {
+      break
+    }
 
-    if (!loadedImages.has(images[index])) {
+    const index = randomInt(0, pool.length - 1)
+    const url = pool[index]
+
+    if (!loadedImages.has(url)) {
       const image = new Image()
-      image.src = images[index]
+      image.src = url
 
+      // 用固定的 url 而不是回头再取 pool[index]，否则 pool 变动后会记错缓存
       image.onload = () => {
-        loadedImages.add(images[index])
+        loadedImages.add(url)
         execOnProgress()
       }
     }
@@ -49,8 +56,13 @@ export function pullImages(length: number, onProgress?: (progress: number) => vo
       execOnProgress()
     }
 
-    resultImages.push(images[index])
-    images.splice(index, 1)
+    resultImages.push(url)
+    pool.splice(index, 1)
+  }
+
+  // 图片数量不足时也要把进度补满，否则调用方的等待永远不会结束
+  if (progress < length && typeof onProgress === 'function') {
+    onProgress(100)
   }
 
   return resultImages

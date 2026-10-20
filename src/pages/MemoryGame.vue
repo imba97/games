@@ -287,9 +287,8 @@ async function reset() {
   timer.time = 0
   stopTimer()
 
-  // 游戏开始，首先取出一个作为二选一之一
+  // 游戏开始时先取一张图放进已选选项，作为后续的障碍项候选
   const first = pullOne()
-  currentOptionsList.value.push(first)
   checkedOptionsList.value.push(first)
 
   // 再取出一个作为当前选项

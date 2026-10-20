@@ -52,15 +52,15 @@ export const AudioName: Record<string, () => string> = Object.freeze({
   [AudioType.Chou2]: () => t('taoZheSimulator.chou2')
 })
 
-export const AudioColor: Record<string, { text: string, backgrond: string }>
+export const AudioColor: Record<string, { text: string, background: string }>
   = Object.freeze({
-    [AudioType.A]: { text: '#fff', backgrond: '#8b5cf6' },
-    [AudioType.Ai]: { text: '#fff', backgrond: '#0ea5e9' },
-    [AudioType.Chou1]: { text: '#fff', backgrond: '#22c55e' },
-    [AudioType.Chou2]: { text: '#fff', backgrond: '#f59e0b' },
-    [AudioType.Ei]: { text: '#fff', backgrond: '#4b5563' },
-    [AudioType.O]: { text: '#fff', backgrond: '#57534e' },
-    [AudioType.SunNan]: { text: '#fff', backgrond: '#f43f5e' }
+    [AudioType.A]: { text: '#fff8ec', background: '#8a5cf6' },
+    [AudioType.Ai]: { text: '#1f1633', background: '#5cc8f5' },
+    [AudioType.Chou1]: { text: '#1f1633', background: '#4fc98a' },
+    [AudioType.Chou2]: { text: '#1f1633', background: '#f7b32b' },
+    [AudioType.Ei]: { text: '#fff8ec', background: '#6b7280' },
+    [AudioType.O]: { text: '#1f1633', background: '#f0a04b' },
+    [AudioType.SunNan]: { text: '#fff8ec', background: '#f0567a' }
   })
 
 export enum FeedbackType {

@@ -1,36 +1,222 @@
 <style lang="scss" scoped>
-.tao-zhe-container {
-  --at-apply: m-auto md:w-sm;
+.tao {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  width: 100%;
+  max-width: 620px;
+  min-height: calc(100vh - 64px);
+  margin: 0 auto;
+  padding: 36px 20px 56px;
 }
 
-.buttons-container {
-  & > div {
-    --at-apply: flex items-center gap-2 flex-wrap;
-  }
+.score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
 
-  button {
-    --at-apply: py-2 px-4  text-5 b-px b-solid b-black
-      rounded-2;
-  }
+.score-label {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: rgba(255, 248, 236, 0.6);
+}
+
+.score-value {
+  font-family: var(--font-mono);
+  font-size: clamp(36px, 9vw, 52px);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.runway {
+  position: relative;
+  width: 100%;
+  padding: 24px 0 44px;
+}
+
+.runway-lane {
+  position: relative;
+  height: 64px;
+}
+
+/* 节拍轨道 */
+.runway-lane::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 3px;
+  left: 10%;
+  z-index: 0;
+  height: 38px;
+  background: linear-gradient(180deg, rgba(255, 248, 236, 0.06), transparent);
+  border-radius: 10px 10px 0 0;
+}
+
+.runway-line {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 10%;
+  z-index: 3;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 248, 236, 0.5),
+    rgba(255, 248, 236, 0.08)
+  );
+  border-radius: 999px;
+}
+
+.runway-hit {
+  position: absolute;
+  bottom: -13px;
+  left: 10%;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  color: var(--ink);
+  background: var(--paper);
+  border-radius: 999px;
+  box-shadow: 0 0 0 3px var(--flame);
+  transform: translateX(-50%);
+}
+
+.hit-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.runway-blocks {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 10%;
+  height: 100%;
 }
 
 .block {
-  --at-apply: px-3 py-2;
-
+  position: absolute;
+  right: 100%;
+  bottom: 12px;
+  z-index: 2;
+  padding: 8px 14px;
+  font-size: 18px;
+  font-weight: 800;
+  white-space: nowrap;
+  border-radius: 12px;
+  box-shadow: 0 3px 0 rgba(10, 6, 20, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
   animation: run 1.5s linear;
+}
+
+.runway-feedback {
+  position: absolute;
+  bottom: 46px;
+  left: 10%;
+}
+
+.feedback {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--marigold);
+  white-space: nowrap;
+  animation: bounce 0.4s ease-out both;
+}
+
+.buttons-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(68px, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.pad {
+  padding: 14px 8px;
+  font-size: 17px;
+  font-weight: 700;
+  border-radius: 16px;
+  box-shadow: 0 4px 0 rgba(10, 6, 20, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+
+  &:hover {
+    box-shadow: 0 6px 0 rgba(10, 6, 20, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    box-shadow: 0 1px 0 rgba(10, 6, 20, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transform: translateY(3px);
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+}
+
+.loading {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: rgba(255, 248, 236, 0.6);
+}
+
+.btn-primary {
+  padding: 14px 44px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--flame);
+  border-radius: 16px;
+  box-shadow: var(--drop), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
+
+  &:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0 rgba(10, 6, 20, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  }
+
+  &:active {
+    transform: translate(3px, 3px);
+    box-shadow: 2px 2px 0 rgba(10, 6, 20, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  }
+}
+
+.disc {
+  width: 60px;
+  height: 60px;
+  background:
+    radial-gradient(circle, var(--flame) 0 15%, var(--paper) 15% 19%, #4a3572 19% 100%),
+    repeating-radial-gradient(
+      circle,
+      transparent 0 5px,
+      rgba(255, 248, 236, 0.07) 5px 6px
+    );
+  border-radius: 999px;
+  box-shadow: 0 0 0 2px rgba(255, 248, 236, 0.16), 0 8px 18px rgba(10, 6, 20, 0.5);
+  animation: rotate 2.4s infinite linear;
 }
 
 @keyframes run {
   0% {
     right: 0%;
   }
+
   100% {
     right: 100%;
   }
-}
-
-.feedback {
-  animation: bounce 0.4s;
 }
 
 @keyframes bounce {
@@ -39,9 +225,11 @@
     font-size: 0;
     opacity: 0;
   }
+
   50% {
     opacity: 1;
   }
+
   100% {
     bottom: 3rem;
     font-size: 2.5rem;
@@ -49,121 +237,100 @@
   }
 }
 
-.rotate-cd {
-  animation: rotate 2s infinite linear;
-}
-
 @keyframes rotate {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 560px) {
+  .tao {
+    gap: 22px;
+    padding: 28px 16px 44px;
+  }
+
+  .buttons-container {
+    grid-template-columns: repeat(auto-fit, minmax(76px, 1fr));
+  }
+
+  .pad {
+    padding: 12px 6px;
+    font-size: 15px;
   }
 }
 </style>
 
 <template>
-  <div class="tao-zhe-container" p-3 pr-0>
-    <div mt-10>
-      <div text="10 primary">
-        <span>{{ t('taoZheSimulator.point') }}</span>
-        <span ml-2>{{ point }}</span>
-      </div>
+  <div class="tao">
+    <div class="score">
+      <span class="score-label">{{ t('taoZheSimulator.point') }}</span>
+      <span class="score-value">{{ point }}</span>
     </div>
-    <div my-30 class="progress">
-      <div w-full h-3 rounded-l-full bg-primary relative flex items-center>
-        <div absolute bottom-3 right-0 w="90%" h-1 bg-red>
-          <div absolute bottom-0 left-0 w-1 h-8 rounded-t-full bg-blue />
-          <div>
-            <div
-              v-for="item in blocks"
-              :key="item.id"
-              class="block"
-              absolute
-              bottom-0
-              right="100%"
-              w-auto
-              font-bold
-              text-5
-              flex
-              items-center
-              justify-center
-              rounded-2
-              :style="audioStyles[item.type]"
-            >
-              <span text-truncate>{{ item.name }}</span>
-            </div>
-          </div>
-          <div>
-            <div
-              v-for="item in feedbacks"
-              :key="item.id"
-              class="feedback"
-              absolute
-              bottom-12
-              left-0
-              opacity-0
-              text="10 amber"
-            >
-              {{ item.text }}
-            </div>
+
+    <div class="runway">
+      <div class="runway-lane">
+        <div class="runway-line" />
+
+        <div class="runway-hit">
+          <div
+            i-material-symbols-light-keyboard-double-arrow-left-rounded
+            class="hit-icon"
+          />
+        </div>
+
+        <div class="runway-blocks">
+          <div
+            v-for="item in blocks"
+            :key="item.id"
+            class="block"
+            :style="audioStyles[item.type]"
+          >
+            <span>{{ item.name }}</span>
           </div>
         </div>
 
-        <div absolute bottom-2 left-0 flex animate-flash animate-count-infinite>
-          <div
-            i-material-symbols-light-keyboard-double-arrow-left-rounded
-            h-10
-            w-10
-          />
+        <div class="runway-feedback">
+          <div v-for="item in feedbacks" :key="item.id" class="feedback">
+            {{ item.text }}
+          </div>
         </div>
       </div>
     </div>
 
     <div class="buttons-container">
-      <div>
-        <button
-          v-for="(getName, type) in AudioName"
-          :key="type"
-          :style="audioStyles[type as AudioType]"
-          @click="play(type as AudioType)"
-        >
-          {{ getName() }}
-        </button>
+      <button
+        v-for="(getName, type) in AudioName"
+        :key="type"
+        class="pad"
+        type="button"
+        :style="audioStyles[type as AudioType]"
+        @click="play(type as AudioType)"
+      >
+        {{ getName() }}
+      </button>
+    </div>
+
+    <div class="actions">
+      <div v-show="loadingAudios" class="loading">
+        {{ t('game.loadingWithProgress', { progress }) }}
       </div>
 
-      <div mt-10 flex justify-center>
-        <div v-show="loadingAudios" mt-3>
-          <div text-8>
-            {{
-              t('game.loadingWithProgress', {
-                progress
-              })
-            }}
-          </div>
-        </div>
-        <div v-show="!loadingAudios">
-          <div v-show="!isStarted" mt-3 gap-2>
-            <button
-              bg-primary
-              text="8! white"
-              @click="() => (loadedAudios ? playMusic() : doLoadAudios())"
-            >
-              {{ loadedAudios ? t('game.start') : t('game.loadAudio') }}
-            </button>
-          </div>
-          <div v-show="isStarted">
-            <div
-              class="rotate-cd"
-              i-icon-park-outline-music-cd
-              h-20
-              w-20
-              bg-primary
-            />
-          </div>
-        </div>
-      </div>
+      <template v-if="!loadingAudios">
+        <button
+          v-if="!isStarted"
+          class="btn-primary"
+          type="button"
+          @click="() => (loadedAudios ? playMusic() : doLoadAudios())"
+        >
+          {{ loadedAudios ? t('game.start') : t('game.loadAudio') }}
+        </button>
+
+        <div v-else class="disc" />
+      </template>
     </div>
   </div>
 </template>
@@ -308,7 +475,7 @@ const audioStyles = (Object.keys(AudioColor) as AudioType[]).reduce<
 >((result, type) => {
   result[type] = {
     color: AudioColor[type].text,
-    backgroundColor: AudioColor[type].backgrond
+    backgroundColor: AudioColor[type].background
   }
 
   return result

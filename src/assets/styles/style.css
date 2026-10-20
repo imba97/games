@@ -1,17 +1,72 @@
-* {
-  --at-apply: m-0 p-0;
+:root {
+  --ink: #1f1633;
+  --paper: #fff8ec;
+  --plum: #221636;
+  --flame: #ff5a3c;
+  --lilac: #a78bfa;
+  --mint: #4fc98a;
+  --marigold: #f7b32b;
+  --font-sans: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+  /* 深色底上的硬阴影 */
+  --drop: 6px 6px 0 rgba(10, 6, 20, 0.55);
+  /* 纸色面内的硬阴影 */
+  --drop-ink: 5px 5px 0 var(--ink);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html,
 body,
 #app {
-  --at-apply: w-screen h-screen overflow-hidden;
+  min-height: 100%;
 }
 
-#app {
-  --at-apply: bg-[#edefff];
+body {
+  font-family: var(--font-sans);
+  color: var(--paper);
+  background-color: var(--plum);
+  background-image:
+    radial-gradient(circle at 50% -12%, rgba(255, 90, 60, 0.3), transparent 52%),
+    radial-gradient(circle at 8% 14%, rgba(167, 139, 250, 0.18), transparent 40%),
+    radial-gradient(circle at 94% 88%, rgba(79, 201, 138, 0.14), transparent 44%),
+    radial-gradient(rgba(255, 248, 236, 0.07) 1px, transparent 1px);
+  background-size: auto, auto, auto, 14px 14px;
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 button {
-  --at-apply: b-none;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--flame);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 3px solid var(--marigold);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

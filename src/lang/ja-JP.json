@@ -1,7 +1,9 @@
 {
-  "pages": {
-    "memoryGame": "メモリーゲーム",
-    "taoZheSimulator": "TaoZhe シミュレータ"
+  "game": {
+    "start": "スタート",
+    "loading": "ローディング",
+    "loadingWithProgress": "ローディング {progress}%",
+    "loadAudio": "ロードサウンド"
   },
   "memoryGame": {
     "startTips": "この画像を覚えてください。",
@@ -12,6 +14,12 @@
     "over": "敗北！ポイント {score}",
     "reset": "リスタート"
   },
+  "pages": {
+    "memoryGame": "メモリーゲーム",
+    "memoryGameDesc": "覚えた画像を選択肢から探す",
+    "taoZheSimulator": "TaoZhe シミュレータ",
+    "taoZheSimulatorDesc": "曲に合わせてタップして得点"
+  },
   "taoZheSimulator": {
     "o": "オ",
     "a": "ア",
@@ -21,11 +29,5 @@
     "chou1": "チョウ→",
     "chou2": "チョウ↘",
     "point": "ポイント"
-  },
-  "game": {
-    "start": "スタート",
-    "loading": "ローディング",
-    "loadingWithProgress": "ローディング {progress}%",
-    "loadAudio": "ロードサウンド"
   }
 }

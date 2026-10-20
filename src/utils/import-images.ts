@@ -1,4 +1,4 @@
-import { randomInt } from '@/utils/collection'
+import { shuffle } from '@/utils/collection'
 
 const images = import.meta.glob('@/assets/images/*.png', {
   eager: true
@@ -14,56 +14,60 @@ export function importImages() {
 }
 
 /**
- * 取出一定数量的照片
- *
- * 该函数会自动预加载图片
- * @param length 取出数量
- * @param onProgress 进度回调
+ * 随机挑出 count 张图片，返回已打乱顺序的副本
  */
-export function pullImages(length: number, onProgress?: (progress: number) => void) {
-  const pool = [...importImages()]
-  const resultImages: string[] = []
+export function pickImages(count: number) {
+  return shuffle(importImages()).slice(0, count)
+}
 
-  let progress = 0
+/**
+ * 按传入顺序预加载图片
+ *
+ * 已加载过的会直接计入进度；单张失败也计入，避免进度卡住
+ * @param urls 需要加载的图片地址
+ * @param onProgress 进度回调，0-100
+ */
+export function preloadImages(
+  urls: string[],
+  onProgress?: (progress: number) => void
+) {
+  if (urls.length === 0) {
+    return Promise.resolve()
+  }
 
-  const execOnProgress = () => {
+  let settled = 0
+
+  const settle = () => {
+    settled++
+
     if (typeof onProgress === 'function') {
-      progress++
-      onProgress((progress / length) * 100)
+      onProgress((settled / urls.length) * 100)
     }
   }
 
-  for (let i = 0; i < length; i++) {
-    // 图片不够时提前结束，避免取到 undefined
-    if (pool.length === 0) {
-      break
-    }
-
-    const index = randomInt(0, pool.length - 1)
-    const url = pool[index]
-
-    if (!loadedImages.has(url)) {
-      const image = new Image()
-      image.src = url
-
-      // 用固定的 url 而不是回头再取 pool[index]，否则 pool 变动后会记错缓存
-      image.onload = () => {
-        loadedImages.add(url)
-        execOnProgress()
+  return Promise.all(
+    urls.map((url) => {
+      if (loadedImages.has(url)) {
+        settle()
+        return Promise.resolve()
       }
-    }
-    else {
-      execOnProgress()
-    }
 
-    resultImages.push(url)
-    pool.splice(index, 1)
-  }
+      return new Promise<void>((resolve) => {
+        const image = new Image()
 
-  // 图片数量不足时也要把进度补满，否则调用方的等待永远不会结束
-  if (progress < length && typeof onProgress === 'function') {
-    onProgress(100)
-  }
+        image.onload = () => {
+          loadedImages.add(url)
+          settle()
+          resolve()
+        }
 
-  return resultImages
+        image.onerror = () => {
+          settle()
+          resolve()
+        }
+
+        image.src = url
+      })
+    })
+  )
 }

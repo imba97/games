@@ -228,7 +228,7 @@
     </div>
 
     <div v-else class="ready">
-      <template v-if="progress === 100">
+      <template v-if="ready">
         <p class="ready-tip">
           {{ t('memoryGame.startTips') }}
         </p>
@@ -257,11 +257,31 @@
 import Dialog from '@/components/Dialog.vue'
 
 import { randomInt, shuffle } from '@/utils/collection'
-import { pullImages } from '@/utils/import-images'
+import { pickImages, preloadImages } from '@/utils/import-images'
 
 const { t } = useI18n()
 
+/**
+ * 每局使用的图片数量
+ */
+const IMAGE_COUNT = 10
+
+/**
+ * 开局前先加载的张数，剩下的在开局后静默加载
+ */
+const PRELOAD_COUNT = 6
+
 const progress = ref(0)
+
+/**
+ * 开局所需的图片是否已就绪
+ */
+const ready = ref(false)
+
+/**
+ * 开局后再静默加载的图片
+ */
+const pendingImages = ref<string[]>([])
 
 const timer = reactive({
   id: -1,
@@ -317,21 +337,28 @@ onUnmounted(() => {
 
 async function initImages() {
   progress.value = 0
+  ready.value = false
 
-  return new Promise((resolve) => {
-    allOptionsList.value = pullImages(10, (p) => {
-      progress.value = p
-      if (p === 100) {
-        resolve(true)
-      }
-    })
+  const picked = pickImages(IMAGE_COUNT)
+
+  allOptionsList.value = [...picked]
+  pendingImages.value = picked.slice(PRELOAD_COUNT)
+
+  // 只等开局要用的那批，进度按这批算
+  await preloadImages(picked.slice(0, PRELOAD_COUNT), (p) => {
+    progress.value = p
   })
+
+  ready.value = true
 }
 
 function start() {
   startTimer()
   next()
   isStarted.value = true
+
+  // 开局后静默补齐剩余图片，不展示进度
+  preloadImages(pendingImages.value)
 }
 
 function startTimer() {
@@ -409,16 +436,10 @@ function generateObstacle() {
 }
 
 /**
- * 随机取出一个值
+ * 按预加载好的顺序取出下一张
  */
 function pullOne() {
-  if (allOptionsList.value.length === 0) {
-    return ''
-  }
-
-  const random = randomInt(0, allOptionsList.value.length - 1)
-  const [item] = allOptionsList.value.splice(random, 1)
-  return item
+  return allOptionsList.value.shift() ?? ''
 }
 
 function win() {

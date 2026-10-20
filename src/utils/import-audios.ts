@@ -2,11 +2,11 @@ import { AudioType } from '@/enums/audio'
 
 const audios = import.meta.glob('@/assets/audios/*.mp3', {
   eager: true
-})
+}) as Record<string, { default: string }>
 
-const importImages = () => {
-  return _.map(audios, (audio: any, key) => ({
-    importPath: key,
+const importAudios = () => {
+  return Object.entries(audios).map(([importPath, audio]) => ({
+    importPath,
     audioSrc: audio.default
   }))
 }
@@ -17,7 +17,7 @@ export const loadAudios = (onProgress?: (progress: number) => void) => {
 
     let loaded = 0
 
-    const audioList = importImages()
+    const audioList = importAudios()
 
     audioList.forEach(({ audioSrc, importPath }) => {
       const audio = new Audio()
@@ -32,7 +32,7 @@ export const loadAudios = (onProgress?: (progress: number) => void) => {
       loadedAudioList[type] = audio
 
       audio.oncanplaythrough = () => {
-        if (_.isFunction(onProgress)) {
+        if (typeof onProgress === 'function') {
           onProgress((++loaded / audioList.length) * 100)
         }
 

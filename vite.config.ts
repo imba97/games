@@ -28,7 +28,6 @@ export default defineConfig({
         'vue-router',
         'vue-i18n',
         {
-          lodash: [['*', '_']],
           '@/lang': [['default', 'i18n']]
         }
       ],

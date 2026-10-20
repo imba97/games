@@ -1,6 +1,8 @@
+import { randomInt } from '@/utils/collection'
+
 const images = import.meta.glob('@/assets/images/*.png', {
   eager: true
-})
+}) as Record<string, { default: string }>
 
 /**
  * 已加载图片缓存
@@ -8,7 +10,7 @@ const images = import.meta.glob('@/assets/images/*.png', {
 const loadedImages = new Set<string>()
 
 export const importImages = () => {
-  return _.map(images, (image: any) => image.default)
+  return Object.values(images).map((image) => image.default)
 }
 
 /**
@@ -22,20 +24,20 @@ export const pullImages = (
   length: number,
   onProgress?: (progress: number) => void
 ) => {
-  const images = _.clone(importImages())
+  const images = [...importImages()]
   const resultImages: string[] = []
 
   let progress = 0
 
   const execOnProgress = () => {
-    if (_.isFunction(onProgress)) {
+    if (typeof onProgress === 'function') {
       progress++
       onProgress((progress / length) * 100)
     }
   }
 
   for (let i = 0; i < length; i++) {
-    const index = _.random(0, images.length - 1)
+    const index = randomInt(0, images.length - 1)
 
     if (!loadedImages.has(images[index])) {
       const image = new Image()

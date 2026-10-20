@@ -90,6 +90,7 @@ img {
 import Dialog from '@/components/Dialog.vue'
 
 import { pullImages } from '@/utils/import-images'
+import { randomInt, shuffle } from '@/utils/collection'
 
 const { t } = useI18n()
 
@@ -201,14 +202,14 @@ const next = (clickedItem?: string) => {
   newCurrentOptionsList.push(needToFindImage.value)
 
   // 打乱顺序
-  currentOptionsList.value = _.shuffle(newCurrentOptionsList)
+  currentOptionsList.value = shuffle(newCurrentOptionsList)
 
   // 重新选取一个
   currentImage.value = pullOne()
 }
 
 const generateObstacle = () => {
-  const list = _.clone(checkedOptionsList.value)
+  const list = [...checkedOptionsList.value]
 
   // 不足 5 个则全部放到可选项中
   if (list.length <= 5) {
@@ -219,8 +220,8 @@ const generateObstacle = () => {
 
   // 大于 5 个则随机选 5 个
   for (let i = 0; i < 5; i++) {
-    const random = _.random(0, list.length - 1)
-    const [item] = _.pullAt(list, random)
+    const random = randomInt(0, list.length - 1)
+    const [item] = list.splice(random, 1)
     newList.push(item)
   }
 
@@ -235,8 +236,8 @@ const pullOne = () => {
     return ''
   }
 
-  const random = _.random(0, allOptionsList.value.length - 1)
-  const [item] = _.pullAt(allOptionsList.value, random)
+  const random = randomInt(0, allOptionsList.value.length - 1)
+  const [item] = allOptionsList.value.splice(random, 1)
   return item
 }
 

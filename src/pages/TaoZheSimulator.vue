@@ -177,6 +177,7 @@ import {
 } from '@/enums/audio'
 
 import { loadAudios } from '@/utils/import-audios'
+import { removeWhere, uniqueId } from '@/utils/collection'
 
 type BlockType = {
   id: string
@@ -206,27 +207,21 @@ const audios = ref<Record<AudioType, HTMLAudioElement>>()
 /**
  * 音频播放时间线
  */
-const timeline: Record<string, number | number[]> = _.reduce(
-  {
-    [AudioType.O]: 3.58,
-    [AudioType.A]: [3.9, 4.3],
-    [AudioType.Ai]: 6.15,
-    [AudioType.Ei]: 6.55,
-    [AudioType.SunNan]: 10.1,
-    [AudioType.Chou1]: 12.62,
-    [AudioType.Chou2]: 13
-  },
-  (result, item, key) => {
-    if (_.isArray(item)) {
-      result[key] = item.map((n) => n - showBlockTime)
-    } else {
-      result[key] = item - showBlockTime
-    }
+const timeline: Record<string, number | number[]> = Object.entries({
+  [AudioType.O]: 3.58,
+  [AudioType.A]: [3.9, 4.3],
+  [AudioType.Ai]: 6.15,
+  [AudioType.Ei]: 6.55,
+  [AudioType.SunNan]: 10.1,
+  [AudioType.Chou1]: 12.62,
+  [AudioType.Chou2]: 13
+}).reduce<Record<string, number | number[]>>((result, [key, item]) => {
+  result[key] = Array.isArray(item)
+    ? item.map((n) => n - showBlockTime)
+    : item - showBlockTime
 
-    return result
-  },
-  {} as Record<string, number | number[]>
-)
+  return result
+}, {})
 
 /**
  * 音乐块
@@ -251,7 +246,7 @@ const isStarted = ref(false)
 
 const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent)
 
-const loadedAudios = computed(() => !_.isEmpty(audios.value))
+const loadedAudios = computed(() => Object.keys(audios.value ?? {}).length > 0)
 
 let music: HTMLAudioElement | null = null
 
@@ -312,13 +307,12 @@ const playMusic = async () => {
       return
     }
 
-    blocks.value = _.filter(
-      blocks.value,
+    blocks.value = blocks.value.filter(
       (block: BlockType) =>
         block.time - music!.currentTime > -PointRange[FeedbackType.Good].max
     )
 
-    _.remove(
+    removeWhere(
       feedbacks.value,
       (feedback: { time: number }) => music!.currentTime - feedback.time > 0.8
     )
@@ -326,10 +320,10 @@ const playMusic = async () => {
     let playKey
     let time
 
-    _.forEach(timeline, (value, key) => {
+    Object.entries(timeline).forEach(([key, value]) => {
       let latestTime
 
-      if (_.isArray(value)) {
+      if (Array.isArray(value)) {
         for (let i = 0; i < value.length; i++) {
           const n = value[i]
 
@@ -354,9 +348,9 @@ const playMusic = async () => {
       }
     })
 
-    if (once && !_.isUndefined(playKey)) {
+    if (once && playKey !== undefined) {
       blocks.value.push({
-        id: _.uniqueId('blocks_'),
+        id: uniqueId('blocks_'),
         type: playKey as AudioType,
         name: AudioName[playKey as AudioType](),
         time: time! + showBlockTime,
@@ -366,7 +360,7 @@ const playMusic = async () => {
       once = false
     }
 
-    if (_.isUndefined(playKey)) {
+    if (playKey === undefined) {
       once = true
     }
   }, 10)
@@ -375,8 +369,7 @@ const playMusic = async () => {
 const play = (type: AudioType) => {
   ;(audios.value![type].cloneNode() as HTMLAudioElement).play()
 
-  const noPlayedBlock = _.filter(
-    blocks.value,
+  const noPlayedBlock = blocks.value.filter(
     (block: BlockType) => !block.played
   )
 
@@ -412,7 +405,7 @@ const play = (type: AudioType) => {
 
   if (feedbackText) {
     feedbacks.value.push({
-      id: _.uniqueId('feedback_'),
+      id: uniqueId('feedback_'),
       text: feedbackText,
       time: music!.currentTime
     })
@@ -425,17 +418,18 @@ const play = (type: AudioType) => {
  * 移除块
  */
 const removeBlock = (id: string) => {
-  _.remove(blocks.value, (block: BlockType) => block.id === id)
+  removeWhere(blocks.value, (block: BlockType) => block.id === id)
 }
 
 /**
  * 根据时间匹配按键反馈
  */
 const feedbackValueOf = (time: number) => {
-  const feedback = _.findKey(
-    PointRange,
-    (item) => item.min <= time && item.max >= time
-  )
+  const feedback = (Object.keys(PointRange) as FeedbackType[]).find((key) => {
+    const item = PointRange[key]
+
+    return item.min <= time && item.max >= time
+  })
 
   return feedback
 }

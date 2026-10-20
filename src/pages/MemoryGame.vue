@@ -147,6 +147,11 @@ onMounted(() => {
   reset()
 })
 
+// 离开页面时停掉计时器，否则组件卸载后定时器仍在跑
+onUnmounted(() => {
+  stopTimer()
+})
+
 async function initImages() {
   progress.value = 0
 
@@ -167,13 +172,21 @@ function start() {
 }
 
 function startTimer() {
+  // 重复开局时先清掉上一轮，避免计时器叠加
+  stopTimer()
+
   timer.id = window.setInterval(() => {
     timer.time += 10
   }, 10)
 }
 
 function stopTimer() {
+  if (timer.id === -1) {
+    return
+  }
+
   window.clearInterval(timer.id)
+  timer.id = -1
 }
 
 function next(clickedItem?: string) {
@@ -272,9 +285,7 @@ async function reset() {
 
   score.value = 0
   timer.time = 0
-  if (timer.id !== -1) {
-    window.clearInterval(timer.id)
-  }
+  stopTimer()
 
   // 游戏开始，首先取出一个作为二选一之一
   const first = pullOne()

@@ -251,6 +251,20 @@ const loadedAudios = computed(() => Object.keys(audios.value ?? {}).length > 0)
 
 let music: HTMLAudioElement | null = null
 
+let loopTimer: ReturnType<typeof setInterval> | undefined
+
+/**
+ * 停止时间线轮询
+ */
+function stopLoop() {
+  if (loopTimer === undefined) {
+    return
+  }
+
+  clearInterval(loopTimer)
+  loopTimer = undefined
+}
+
 onMounted(() => {
   // iOS 先让开始按钮显示，具体加载在按钮点击事件里
   if (isIOS) {
@@ -260,7 +274,18 @@ onMounted(() => {
   doLoadAudios()
 })
 
+// 离开页面时停掉轮询与音乐，避免定时器在组件卸载后继续跑
+onUnmounted(() => {
+  stopLoop()
+  music?.pause()
+})
+
 async function doLoadAudios() {
+  // 加载中不重复触发
+  if (loadingAudios.value) {
+    return
+  }
+
   // 加载音频
   loadingAudios.value = true
   audios.value = await loadAudios((_progress) => {
@@ -295,17 +320,18 @@ async function playMusic() {
   music.play()
 
   let once = true
-  let timer: ReturnType<typeof setInterval> | undefined
 
-  // 音乐停止事件
-  music.addEventListener('ended', () => {
+  // 用 onended 覆盖而不是 addEventListener，重复开局不会叠加监听
+  music.onended = () => {
     isStarted.value = false
-    clearInterval(timer)
-  })
+    stopLoop()
+  }
 
-  timer = setInterval(() => {
+  stopLoop()
+
+  loopTimer = setInterval(() => {
     if (!music) {
-      clearInterval(timer)
+      stopLoop()
       return
     }
 
@@ -370,7 +396,14 @@ async function playMusic() {
 }
 
 function play(type: AudioType) {
-  ;(audios.value![type].cloneNode() as HTMLAudioElement).play()
+  const audio = audios.value?.[type]
+
+  // 音频还没加载完（比如 iOS 尚未点「加载音频」）时直接忽略，避免抛错
+  if (!audio) {
+    return
+  }
+
+  ;(audio.cloneNode() as HTMLAudioElement).play()
 
   const noPlayedBlock = blocks.value.filter(
     (block: BlockType) => !block.played
@@ -441,6 +474,8 @@ function feedbackValueOf(time: number) {
  * 重置游戏
  */
 function reset() {
+  stopLoop()
+
   if (music) {
     music.currentTime = 0
     music.pause()
